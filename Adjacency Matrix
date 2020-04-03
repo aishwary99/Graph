@@ -1,0 +1,61 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct Graph
+{
+int **Adj;
+};
+struct Graph *createMatrix();
+int main()
+{
+struct Graph *G=createMatrix();
+return 0;
+}
+struct Graph *createMatrix()
+{
+int vertices,edges;
+int i,j;
+struct Graph *G=(struct Graph *) malloc (sizeof(struct Graph));
+if(!G)
+{
+printf("Something went wrong while creating graph....");
+return NULL;
+}
+printf("Enter number of vertices and edges: ");
+scanf("%d %d",&vertices,&edges);
+if(vertices<0 || edges<0) 
+{
+printf("Invalid input\n");
+return NULL;
+}
+G->Adj=(int **) malloc (vertices * sizeof(int *));
+for(i=0;i<vertices;i++)
+{
+G->Adj[i]=(int *) malloc (vertices *sizeof(int));
+}
+for(i=0;i<vertices;i++)
+{
+for(j=0;j<edges;j++)
+{
+G->Adj[i][j]=0;
+}
+}
+printf("Reading edge data..........\n");
+int u,v;
+for(i=0;i<edges;i++)
+{
+scanf("%d %d",&u,&v);
+G->Adj[u][v]=1;
+G->Adj[v][u]=1;
+} 
+printf("Printing graph matrix............\n");
+for(i=0;i<vertices;i++)
+{
+printf("%d -> ",i);
+for(j=0;j<edges;j++)
+{
+printf("%d ",G->Adj[i][j]);
+}
+printf("\n");
+}
+return G;
+}
