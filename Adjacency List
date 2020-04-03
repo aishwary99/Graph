@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct Node
+{
+int vertexNumber;
+struct Node *next;
+};
+struct Graph
+{
+struct Node **Adj;
+};
+struct Graph *createList();
+int main()
+{
+struct Graph *G=createList();
+return 0;
+}
+struct Graph *createList()
+{
+int i,j;
+int vertices,edges;
+struct Graph *G=(struct Graph *)malloc(sizeof(struct Graph));
+if(!G)
+{
+printf("Something went wrong....!\n");
+return NULL;
+}
+struct Node *temp;
+printf("Enter vertices: ");
+scanf("%d",&vertices);
+printf("Enter edges: ");
+scanf("%d",&edges);
+G->Adj=malloc (vertices * sizeof(struct Node));
+for(i=0;i<vertices;i++)
+{
+G->Adj[i]=(struct Node *) malloc (sizeof(struct Node));
+G->Adj[i]->vertexNumber=i;
+G->Adj[i]->next=G->Adj[i];
+}
+printf("Reading edge data........\n");
+int u,v;
+for(i=0;i<edges;i++)
+{
+scanf("%d %d",&u,&v);
+temp=(struct Node *) malloc (sizeof(struct Node));
+temp->vertexNumber=v;
+temp->next=G->Adj[u];
+G->Adj[u]->next=temp;
+
+temp=(struct Node *) malloc (sizeof(struct Node));
+temp->vertexNumber=v;
+temp->next=G->Adj[v];
+G->Adj[v]->next=temp;
+}
+return G;
+}
