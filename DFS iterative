@@ -1,0 +1,40 @@
+void dfs(struct Graph *);
+--------------------------
+
+void dfs(struct Graph *G)
+{
+int startVertex;
+int stack[1000];
+int top,size;
+top=size=1000;
+int visited[G->V];
+
+printf("Enter starting vertex: ");
+scanf("%d",&startVertex);
+if(startVertex<0) return;
+for(int i=0;i<G->V;i++) visited[i]=0;
+
+visited[startVertex]=1;
+top--;
+stack[top]=startVertex;
+
+int element,i;
+while(top!=size)
+{
+element=stack[top];
+top++;
+if(visited[element]!=1)
+{
+printf("%d ",element);
+visited[element]=1;
+}
+for(i=(G->V)-1;i>=0;i--)
+{
+if(G->Adj[element][i]==1 && visited[i]!=1)
+{
+top--;
+stack[top]=i;
+}
+}
+}//loop ends here...
+}//function ends here.....
