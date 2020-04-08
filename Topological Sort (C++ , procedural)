@@ -1,0 +1,122 @@
+#include<iostream>
+#include<stdlib.h>
+#include<list>
+#include<queue>
+#include<iterator>
+using namespace std;
+struct Graph
+{
+int V;
+int E;
+int **Adj;
+};
+struct Graph *createMatrix();
+void topologicalSort(struct Graph *);
+int main()
+{
+struct Graph *G=createMatrix();
+topologicalSort(G);
+return 0;
+}
+void topologicalSort(struct Graph *G)
+{
+int vertices=G->V;
+list<int> t;
+queue<int> q;
+int * visited=(int *) malloc (vertices * sizeof(int));
+int * indegree=(int *) malloc (vertices * sizeof(int));
+for(int i=0;i<vertices;i++)
+{
+visited[i]=0;
+indegree[i]=0;
+}
+for(int i=0;i<vertices;i++)
+{
+for(int j=0;j<vertices;j++)
+{
+if(G->Adj[i][j]==1) 
+{
+indegree[j]++;
+}
+}
+}
+cout<<"Printing indegree array"<<endl;
+for(int i=0;i<vertices;i++) cout<<indegree[i]<<" ";
+cout<<endl;
+for(int i=0;i<vertices;i++)
+{
+if(indegree[i]==0)
+{
+q.push(i);
+visited[i]=1;
+}
+}
+int vertex;
+while(!q.empty())
+{
+vertex=q.front();
+q.pop();
+t.push_back(vertex);
+cout<<"Vertex -> "<<vertex<<endl;
+for(int i=0;i<vertices;i++)
+{
+if(G->Adj[vertex][i]==1 && visited[i]!=1)
+{
+indegree[i]--;
+if(indegree[i]==0)
+{
+q.push(i);
+visited[i]=1;
+}
+}
+}
+}
+list<int>::iterator i=t.begin();
+cout<<"---------------------Sorting result---------------------"<<endl;
+while(i!=t.end())
+{
+cout<<*i<<" ";
+i++;
+}
+}//function ends here...
+struct Graph * createMatrix()
+{
+int vertices,edges;
+int i;
+struct Graph *G=(struct Graph *) malloc (sizeof(struct Graph));
+if(!G) return NULL;
+cout<<"Enter the no. of vertices & edges: ";
+cin>>vertices>>edges;
+G->Adj=(int **) malloc (vertices * sizeof(int *));
+G->V=vertices;
+G->E=edges;
+for(i=0;i<vertices;i++)
+{
+G->Adj[i]=(int *) malloc (vertices * sizeof(int));
+}
+for(i=0;i<vertices;i++)
+{
+for(int j=0;j<vertices;j++)
+{
+G->Adj[i][j]=0;
+}
+}
+cout<<"Reading edge data....."<<endl;
+int u,v;
+for(i=0;i<edges;i++)
+{
+cin>>u>>v;
+G->Adj[u][v]=1;
+}
+cout<<"Printing graph matrix....."<<endl;
+for(i=0;i<vertices;i++)
+{
+cout<<i<<" -> ";
+for(int j=0;j<vertices;j++)
+{
+cout<<G->Adj[i][j]<<" ";
+}
+cout<<endl;
+}
+return G;
+}//function ends here....
