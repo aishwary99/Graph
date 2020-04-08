@@ -1,0 +1,85 @@
+#include<iostream>
+#include<queue>
+#include<malloc.h>
+using namespace std;
+struct Graph
+{
+int V;
+int E;
+int **Adj;
+};
+struct Graph *createMatrix();
+void bfs(struct Graph *);
+void bfsTraversal(struct Graph *,int *,int);
+int main()
+{
+struct Graph *G=createMatrix();
+bfs(G);
+return 0;
+}
+void bfs(struct Graph *G)
+{
+int *visited=(int *) malloc (G->V * sizeof(int));
+for(int i=0;i<G->V;i++) visited[i]=0;
+bfsTraversal(G,visited,0);
+}//function ends here...
+void bfsTraversal(struct Graph *G,int *visited,int startVertex)
+{
+int element;
+int i;
+queue<int> q;
+q.push(startVertex);
+while(!q.empty())
+{
+element=q.front();
+q.pop();
+cout<<element<<" ";
+visited[element]=1;
+for(i=(G->V)-1;i>=0;i--)
+{
+if(visited[i]!=1) q.push(i);
+}
+}
+}//function ends here...
+struct Graph * createMatrix()
+{
+int vertices,edges;
+int i;
+struct Graph *G=(struct Graph *) malloc (sizeof(struct Graph));
+if(!G) return NULL;
+cout<<"Enter the no. of vertices & edges: ";
+cin>>vertices>>edges;
+G->Adj=(int **) malloc (vertices * sizeof(int *));
+G->V=vertices;
+G->E=edges;
+for(i=0;i<vertices;i++)
+{
+G->Adj[i]=(int *) malloc (vertices * sizeof(int));
+}
+for(i=0;i<vertices;i++)
+{
+for(int j=0;j<vertices;j++)
+{
+G->Adj[i][j]=0;
+}
+}
+cout<<"Reading edge data....."<<endl;
+int u,v;
+for(i=0;i<edges;i++)
+{
+cin>>u>>v;
+G->Adj[u][v]=1;
+G->Adj[v][u]=1;
+}
+cout<<"Printing graph matrix....."<<endl;
+for(i=0;i<vertices;i++)
+{
+cout<<i<<" -> ";
+for(int j=0;j<vertices;j++)
+{
+cout<<G->Adj[i][j]<<" ";
+}
+cout<<endl;
+}
+return G;
+}//function ends here....
